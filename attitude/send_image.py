@@ -33,4 +33,25 @@ def send_image(phone_number, image_filename):
     finally:
         driver.quit()
 
-#send_image('9920816377', '2')
+def send_text(phone_number, text):
+    try:
+        link = f'https://web.whatsapp.com/send?phone=91{phone_number}&text&app_absent=0'
+        options = webdriver.ChromeOptions()
+        #options.add_argument(r"user-data-dir=./driver/data")
+        options.add_argument(f"user-data-dir=C:\\Users\\{username}\\AppData\\Local\\Google\\Chrome\\User Data\\Default")
+        driver = webdriver.Chrome(
+            executable_path=r'./driver/chromedriver', options=options)
+        driver.get(link)
+        WebDriverWait(driver, 40).until(EC.presence_of_element_located((By.XPATH, '//*[@id="main"]/footer/div[1]/div[2]/div/div[2]')))
+
+        textbox = driver.find_element_by_xpath('//*[@id="main"]/footer/div[1]/div[2]/div/div[1]/div/div[2]')
+        textbox.send_keys(text)
+        time.sleep(1)
+
+        sendbtn = driver.find_element_by_xpath('//*[@id="main"]/footer/div[1]/div[2]/div/div[2]/button')
+        sendbtn.click()
+        time.sleep(5)
+    finally:
+        driver.quit()
+
+#send_text('9920816377', 'This is a test message')

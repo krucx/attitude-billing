@@ -20,10 +20,29 @@ apparels = {'y':'SHIRT','b':'BELT','t':'TSHIRT','j':'JEANS','p':'PANTS','i':'INN
 
 root = Tk()
 root.title('Attitude')
-root.geometry("500x600")
+root.geometry("600x600")
+
+'''
+
+main_frame = Frame(rt)
+main_frame.pack(fill=BOTH,expand=1)
+
+my_canvas = Canvas(main_frame)
+my_canvas.pack(side=LEFT,fill=BOTH,expand=1)
+
+my_scrollbar = ttk.Scrollbar(main_frame,orient=VERTICAL,command=my_canvas.yview)
+my_scrollbar.pack(side=RIGHT,fill=Y)
+
+my_canvas.configure(yscrollcommand=my_scrollbar.set)
+my_canvas.bind('<Configure>',lambda e: my_canvas.configure(scrollregion = my_canvas.bbox("all")))
+
+root = Frame(my_canvas)
+
+my_canvas.create_window((0,0),window=root,anchor='nw')
+'''
 
 frametree = Frame(root)
-frametree.pack(pady=20)
+frametree.pack(pady=10)
 
 tree = ttk.Treeview(frametree)
 tree.pack(side='left')
@@ -45,7 +64,7 @@ tree.heading('Particulars',text='Particulars',anchor=CENTER)
 tree.heading('Rate',text='Rate',anchor=CENTER)
 
 frametot = Frame(root)
-frametot.pack(pady=10)
+frametot.pack(pady=5)
 
 disclabel = Label(frametot,text=f'DISC : {0}')
 disclabel.pack(side='right')
@@ -53,7 +72,7 @@ totallabel = Label(frametot,text=f'TOTAL : {0}')
 totallabel.pack(side='right')
 
 frame2 = Frame(root)
-frame2.pack(pady=20)
+frame2.pack(pady=10)
 
 pl = Label(frame2,text='Particulars')
 pl.grid(row=1,column=1)
@@ -92,6 +111,7 @@ re.bind('<Return>', add_item)
 pe.bind('<Down>',lambda event:phonee.focus_set())
 re.bind('<Down>',lambda event:phonee.focus_set())
 pe.bind('<Left>',lambda event:disce.focus_set())
+re.bind('<Left>',lambda event:pe.focus_set())
     
 def remove_item(event=''):
     x = tree.selection()
@@ -135,6 +155,11 @@ def create_bill(bill_no,sent):
         do = dobe.get()
         conn.execute(f'''INSERT INTO CUSTOMER VALUES({number},'{nam}','{do}')''')
         conn.commit()
+    else:
+        nam = namee.get()
+        do = dobe.get()
+        conn.execute(f'''UPDATE CUSTOMER SET NAME='{nam}', DOB='{do}' WHERE PHONE="{number}"''')
+        conn.commit()
     date_today = date.today().strftime("%d-%m-%Y")
     total = gen_bill(my_list,int(disce.get()),bill_no)
     if total!=False:
@@ -149,6 +174,15 @@ def next_bill_no():
         cursor1 = conn.execute(f'''SELECT MAX(BILLNO) FROM BILLS''')
         x = cursor1.fetchone()
         return (x[0]+1)
+    
+def last_bill_no():
+    cursor = conn.execute(f'''SELECT * FROM BILLS''')
+    if len(cursor.fetchall())==0:
+        return -1
+    else:
+        cursor1 = conn.execute(f'''SELECT MAX(BILLNO) FROM BILLS WHERE SENT=1''')
+        x = cursor1.fetchone()
+        return x[0]
         
 def print_bill(event=''):
     bill_no = next_bill_no()
@@ -162,6 +196,20 @@ def save_bill(event=''):
     create_bill(bill_no,0)
     count = 0
     remove_all()
+
+def send_prev(event=''):
+    bill_no = last_bill_no()
+    if bill_no==-1:
+        return
+    else:
+        data = conn.execute(f'''SELECT BILLNO,PHONE FROM BILLS WHERE BILLNO='{bill_no}' ''').fetchall()
+        for i in data:
+            try:
+                processThread = threading.Thread(target=send_image, args=(str(i[1]), str(i[0])))
+                processThread.start()
+            except:
+                print('INTERNET DOWN!!')
+    
 
 def send_saved_bills(event=''):
     conn1 = sqlite3.connect('attitude.db')
@@ -278,30 +326,30 @@ frame3 = Frame(root)
 frame3.pack(pady=2)
 
 addbtn = Button(frame3,text='ADD ITEM',command=add_item)
-addbtn.grid(row=2,column=0,padx=10)
+addbtn.grid(row=2,column=0,padx=5)
 
 rembtn = Button(frame3,text='REMOVE SELECTED',command=remove_item)
-rembtn.grid(row=2,column=1,padx=10)
+rembtn.grid(row=2,column=1,padx=5)
+
+send_saved_billsbtn = Button(frame3,text='SEND UNSENT',command=send_saved_bills)
+send_saved_billsbtn.grid(row=2,column=2,padx=5)
+
+send_cabtn = Button(frame3,text='SEND TO CA',command=send_ca)
+send_cabtn.grid(row=2,column=3,padx=5)
 
 frame4 = Frame(root)
 frame4.pack(pady=10)
 
 printbillbtn = Button(frame4,text='PRINT BILL',command=print_bill)
-printbillbtn.grid(row=0,column=1,padx=10)
+printbillbtn.grid(row=0,column=1,padx=5)
 
 whatsappbillbtn = Button(frame4,text='WHATSAPP BILL',command=whatsapp_bill)
-whatsappbillbtn.grid(row=0,column=2,padx=10)
+whatsappbillbtn.grid(row=0,column=2,padx=5)
 
 save_billbtn = Button(frame4,text='SAVE BILL',command=save_bill)
-save_billbtn.grid(row=0,column=3,padx=10)
+save_billbtn.grid(row=0,column=3,padx=5)
 
-frame5 = Frame(root)
-frame5.pack(pady=10)
-
-send_saved_billsbtn = Button(frame5,text='SEND UNSENT',command=send_saved_bills)
-send_saved_billsbtn.grid(row=1,column=1,padx=10)
-
-send_cabtn = Button(frame5,text='SEND TO CA',command=send_ca)
-send_cabtn.grid(row=1,column=2,padx=10)
+send_prevbtn = Button(frame4,text='SEND PREV',command=send_prev)
+send_prevbtn.grid(row=0,column=4,padx=5)
 
 root.mainloop()

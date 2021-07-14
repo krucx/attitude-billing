@@ -51,6 +51,13 @@ def gen_bill(my_list,disc,billno):
             color: #333;
         }
 
+        .invoice-box table tr.top table td.title1 {
+            font-size: 12px;
+            line-height: 12px;
+            color: #808080;
+            text-align: center;
+        }
+
         .invoice-box table tr.information table td {
             padding-bottom: 10px;
         }
@@ -143,6 +150,13 @@ def gen_bill(my_list,disc,billno):
                         <td colspan="2">
                             <table>
                                 <tr>
+                                    <td class='title1'>
+                                        Bill Of Supply - Dealer Under Composite Scheme
+                                    </td>
+                                </tr>
+                            </table>
+                            <table>
+                                <tr>
                                     <td class="title">
                                         <img src="https://drive.google.com/uc?export=view&id=19G6sC_Dt6xvp9q8JCLVKBSNYR0LU5i1a"
                                             style="width: 100%; max-width: 350px" />
@@ -157,7 +171,7 @@ def gen_bill(my_list,disc,billno):
                             <table>
                                 <tr>
                                     <td>
-                                        Phone #: 9819781011<br />
+                                        Contact : 9819781011<br />
                                         GST #: 27AFIPJ1764M1Z2<br />
                                     </td>
                                     <td>

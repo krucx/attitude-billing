@@ -5,8 +5,10 @@ def conversion(filename):
         'crop-w':'380'
     }
     try:
-        imgkit.from_file(f'bills//{filename}.html', f'bills//{filename}.jpg',options=options)
+        con = imgkit.config(wkhtmltoimage='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+        imgkit.from_file(f'bills//{filename}.html', f'bills//{filename}.jpg',options=options,config=con)
         return True
     except:
         return False
-#print(conversion('6'))
+
+#print(conversion('12'))
