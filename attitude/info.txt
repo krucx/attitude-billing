@@ -1,7 +1,0 @@
-https://wkhtmltopdf.org/downloads.html
-
-customer table:  phone int primary key, name varchar, dob varchar
-
-bills table: billno int primary key, phone foriegn key, total int
-
- 
