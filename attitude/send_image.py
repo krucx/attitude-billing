@@ -25,7 +25,7 @@ def send_image(phone_number, image_filename):
             filepath = f'C:\\Users\\{username}\\Desktop\\attitude\\bills\\'+image_filename+'.jpg'
             imagebtn.send_keys(filepath)
             time.sleep(2)
-            sendbtn = driver.find_element_by_xpath('//*[@id="app"]/div[1]/div[1]/div[2]/div[2]/span/div[1]/span/div[1]/div/div[2]/span/div/div')
+            sendbtn = driver.find_element_by_xpath('//*[@id="app"]/div[1]/div[1]/div[2]/div[2]/span/div[1]/span/div[1]/div/div[2]/div/div[2]/div[2]/div/div')
             sendbtn.click()
             time.sleep(5)
         else:
