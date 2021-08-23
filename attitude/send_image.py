@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from configuration import username
 from html_2_jpg import conversion
+import os
 
 def send_image(phone_number, image_filename):
     try:
@@ -22,7 +23,7 @@ def send_image(phone_number, image_filename):
         time.sleep(1)
         imagebtn = driver.find_element_by_xpath('//*[@id="main"]/footer/div[1]/div[1]/div[2]/div/span/div[1]/div/ul/li[1]/button/input')
         if conversion(image_filename):
-            filepath = f'C:\\Users\\{username}\\Desktop\\attitude\\bills\\'+image_filename+'.jpg'
+            filepath = str(os.path.abspath(os.curdir))+'\\bills\\'+image_filename+'.jpg'
             imagebtn.send_keys(filepath)
             time.sleep(2)
             sendbtn = driver.find_element_by_xpath('//*[@id="app"]/div[1]/div[1]/div[2]/div[2]/span/div[1]/span/div[1]/div/div[2]/div/div[2]/div[2]/div/div')
@@ -54,4 +55,4 @@ def send_text(phone_number, text):
     finally:
         driver.quit()
 
-#send_text('9920816377', 'This is a test message')
+#send_image('9920816377', '6')
