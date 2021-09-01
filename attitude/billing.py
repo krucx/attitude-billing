@@ -171,7 +171,7 @@ def gen_bill(my_list,disc,billno):
                             <table>
                                 <tr>
                                     <td>
-                                        Contact : 9819781011<br />
+                                        Contact : 9152681011<br />
                                         GST #: 27AFIPJ1764M1Z2<br />
                                     </td>
                                     <td>
@@ -194,7 +194,7 @@ def gen_bill(my_list,disc,billno):
                     <tr class="item">
                         <td>{{ x[0] }}</td>
 
-                        <td>&#2352 {{ x[1] }}</td>
+                        <td>Rs {{ x[1] }}</td>
                     </tr>
 
                     {% endfor %}
@@ -203,13 +203,13 @@ def gen_bill(my_list,disc,billno):
                     <tr class="total">
                         <td></td>
 
-                        <td>Total: &#2352 {{ sum_items }}</td>
+                        <td>Total: Rs {{ sum_items }}</td>
                     </tr>
 
                     <tr class="total">
                         <td></td>
 
-                        <td> &#2352 {{ disc_sum_items }}</td>
+                        <td> Rs {{ disc_sum_items }}</td>
                     </tr>
 
                 </table>
